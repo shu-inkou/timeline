@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="http://code.angularjs.org/1.2.0/angular.min.js"></script>
+    <script type="text/javascript">
+	    var myapp = angular.module('myapp', []);
+		
+		myapp.factory("webSocket", function($rootScope) {
+			var connection = new WebSocket('ws://echo.websocket.org');	
+			
+			// When the connection is open, send some data to the server
+			connection.onopen = function () {
+			  connection.send('Ping'); // Send the message 'Ping' to the server
+			};
+
+			// Log errors
+			connection.onerror = function (error) {
+			  console.log('WebSocket Error ' + error);
+			};
+
+			// Log messages from the server
+			connection.onmessage = function (e) {
+				$rootScope.$broadcast("onmessage", {rep : e.data});
+			  console.log('Server: ' + e.data);
+			};
+			
+			return connection;
+		});
+		
+		myapp.controller('myctrl', function ($scope, webSocket) {
+			$scope.serverRes = "waiton";
+		
+		    $scope.send = function () {
+		    	webSocket.send($scope.message);
+		    };
+		    
+		    $scope.$on("onmessage", function(event, args) {
+			     $scope.$apply(function () {
+		            $scope.serverRes = "Server:" + args.rep;
+		        });
+		    	
+		    	
+		    });
+		});
+    </script>
+  </head>
+  <body>
+    <div ng-app="myapp">
+    <div ng-controller="myctrl">
+    	<input type="text" ng-model="message"></input>
+        <button ng-click="send()">Send</button>
+        <div>{{serverRes}}</div>
+    </div>
+</div>
+  </body>
+</html>

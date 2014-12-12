@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/highcharts-ng.min.js"></script>
+        <script type="text/javascript" src="js/highstock.js"></script>
+        <script type="text/javascript" src="js/ac.js"></script>
+    </head>
+    <body>
+        <div ng-app="myapp">
+            <div ng-controller="myctrl">
+                <input ng-model="highchartsNG.title.text">
+                <button ng-click="addSeries()">Add Series</button>
+                <button ng-click="addPoints()">Add Points to Random Series</button>
+                <button ng-click="removeRandomSeries()">Remove Random Series</button>
+                <button ng-click="swapChartType()">Line/Bar</button>
+                <highchart id="chart1" config="highchartsNG"></highchart>
+            </div>
+        </div>
+    </body>
+</html>
